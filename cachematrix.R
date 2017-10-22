@@ -1,15 +1,28 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
+##The purpose of this is to: 1. set the matrix, 2. get the matrix, 3. set the inverse, 4. get the inverse
+## modeled after the mean example
 makeCacheMatrix <- function(x = matrix()) {
-
+  inv <- NULL
+  set <- function(y){
+    x <<- y
+    inv <<- NULL
+  }
+  get <- function() x
+  s.inv <- function(inverse) inv <<- inverse 
+  g.inv <- function () inv
+  list(set = set, 
+       get = get, 
+     s.inv = s.inv, 
+     g.inv = g.inv)
 }
-
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+## calculates the inverse matrix
+cacheInverse <- function(x, ...) {
+  inv <- x$g.inv()
+  if (!is.null(inv)){
+    message("getting cached data")
+    return(inv)
+  }
+  data <- x$get() #the data of the matrix is called in order to then find the matrix
+  inv <- solve(data, ...)
+  x$s.inv(inv) ##where the made inverse is then called back
+  return(inv) ##and returned
 }
